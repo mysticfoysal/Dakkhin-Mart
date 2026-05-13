@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DokkhinMart – দক্ষিণের স্বাদ | Premium Coastal Products</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── CSS Variables ──────────────────────────────── */
+    :root {
+      --green-dark:   #1a3a2a;
+      --green-mid:    #2d6a4f;
+      --green-bright: #40916c;
+      --green-light:  #74c69d;
+      --green-pale:   #d8f3dc;
+      --gold:         #e9c46a;
+      --gold-dark:    #c49a20;
+      --cream:        #faf8f2;
+      --white:        #ffffff;
+      --text-dark:    #1a1a1a;
+      --text-mid:     #4a5568;
+      --text-light:   #718096;
+      --border:       #e2e8f0;
+      --danger:       #e53e3e;
+      --danger-light: #fff5f5;
+      --success:      #38a169;
+      --warning:      #d69e2e;
+      --shadow-sm:    0 2px 8px  rgba(0,0,0,0.06);
+      --shadow-md:    0 8px 30px rgba(0,0,0,0.10);
+      --shadow-lg:    0 20px 60px rgba(0,0,0,0.14);
+      --radius:       16px;
+      --radius-sm:    8px;
+      --transition:   all 0.3s cubic-bezier(0.4,0,0.2,1);
+      --navbar-h:     72px;
+    }
+    .dark {
+      --cream:      #0f1923;
+      --white:      #1a2535;
+      --text-dark:  #e2e8f0;
+      --text-mid:   #a0aec0;
+      --text-light: #718096;
+      --border:     #2d3748;
+      --green-pale: #1a2e1f;
+    }
+
+    /* ── Reset ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1,h2,h3,h4 { font-family: 'Playfair Display', serif; line-height: 1.2; }
+    h1 { font-size: clamp(2rem,5vw,3.5rem); }
+    h2 { font-size: clamp(1.6rem,3.5vw,2.4rem); }
+    h3 { font-size: clamp(1.2rem,2.5vw,1.6rem); }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; }
+    ul { list-style: none; }
+
+    /* ── Layout ─────────────────────────────────────── */
+    .container  { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 72px 0; }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-header p { color: var(--text-mid); margin-top: 12px; font-size: 1.05rem; }
+    .section-badge {
+      display: inline-block; background: var(--green-pale); color: var(--green-mid);
+      padding: 5px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;
+    }
+
+    /* ── Buttons ────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 50px;
+      font-weight: 600; font-size: 14px; cursor: pointer; border: 2px solid transparent;
+      transition: var(--transition); letter-spacing: 0.3px; white-space: nowrap;
+    }
+    .btn-primary  { background: var(--green-mid); color: white; border-color: var(--green-mid); }
+    .btn-primary:hover  { background: var(--green-dark); border-color: var(--green-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45,106,79,0.35); }
+    .btn-gold     { background: var(--gold); color: var(--green-dark); border-color: var(--gold); font-weight: 700; }
+    .btn-gold:hover { background: var(--gold-dark); border-color: var(--gold-dark); transform: translateY(-2px); }
+    .btn-outline  { background: transparent; border-color: white; color: white; }
+    .btn-outline:hover { background: white; color: var(--green-dark); }
+    .btn-sm  { padding: 8px 18px; font-size: 13px; }
+    .btn-lg  { padding: 16px 36px; font-size: 16px; }
+    .btn-block { width: 100%; justify-content: center; }
+
+    /* ── Navbar ─────────────────────────────────────── */
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(250,248,242,0.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      height: var(--navbar-h);
+    }
+    .dark .navbar { background: rgba(15,25,35,0.97); }
+    .navbar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: var(--navbar-h);
+    }
+    .navbar-brand { display: flex; align-items: center; gap: 10px; }
+    .logo-icon {
+      width: 42px; height: 42px; background: var(--green-mid);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;
+    }
+    .brand-text span { font-family: 'Playfair Display',serif; font-size: 22px; font-weight: 700; color: var(--green-dark); display: block; }
+    .brand-text small { font-size: 10px; color: var(--text-light); letter-spacing: 1.5px; text-transform: uppercase; }
+    .dark .brand-text span { color: var(--text-dark); }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 14px;
+      color: var(--text-mid); transition: var(--transition);
+    }
+    .nav-links a:hover, .nav-links a.active { background: var(--green-pale); color: var(--green-dark); }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .nav-icon-btn {
+      width: 42px; height: 42px; border-radius: 50%; background: transparent;
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: var(--text-mid); transition: var(--transition); position: relative;
+    }
+    .nav-icon-btn:hover { background: var(--green-pale); color: var(--green-dark); }
+    .badge {
+      position: absolute; top: 2px; right: 2px; min-width: 18px; height: 18px;
+      background: var(--green-mid); color: white; border-radius: 50%;
+      font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+      padding: 0 3px;
+    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text-dark); border-radius: 2px; transition: var(--transition); display: block; }
+
+    /* ── Mobile Nav ─────────────────────────────────── */
+    .mobile-nav {
+      position: fixed; top: var(--navbar-h); left: 0; right: 0; bottom: 0;
+      background: var(--white); z-index: 900;
+      transform: translateX(-100%); transition: var(--transition);
+      padding: 24px; overflow-y: auto;
+      width: min(300px, 100%);
+      box-shadow: var(--shadow-lg);
+    }
+    .mobile-nav.open { transform: translateX(0); }
+    .mobile-nav a, .mobile-nav button {
+      display: block; padding: 14px 16px; font-size: 15px; font-weight: 600;
+      color: var(--text-dark); border-radius: 10px; transition: var(--transition);
+      border: none; background: none; width: 100%; text-align: left; cursor: pointer;
+    }
+    .mobile-nav a:hover, .mobile-nav button:hover { background: var(--green-pale); color: var(--green-dark); }
+    .mobile-nav-divider { height: 1px; background: var(--border); margin: 8px 0; }
+    .mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 899; }
+    .mobile-overlay.active { display: block; }
+
+    /* ── Hero ───────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, #52b788 100%);
+      min-height: 88vh; display: flex; align-items: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23fff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-content { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1; padding: 80px 0; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2); color: var(--gold);
+      padding: 8px 18px; border-radius: 50px; font-size: 13px;
+      font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px;
+    }
+    .hero h1 { font-size: clamp(2.5rem,5vw,3.8rem); color: white; margin-bottom: 20px; }
+    .hero h1 span { color: var(--gold); }
+    .hero p { color: rgba(255,255,255,0.82); font-size: 17px; max-width: 480px; margin-bottom: 36px; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-stats { display: flex; gap: 36px; margin-top: 52px; }
+    .hero-stat strong { display: block; font-size: 28px; font-family: 'Playfair Display',serif; color: white; }
+    .hero-stat span { font-size: 13px; color: rgba(255,255,255,0.6); }
+    .hero-visual { position: relative; }
+    .hero-card-float {
+      background: rgba(255,255,255,0.12); backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius);
+      padding: 28px; animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .hero-card-float h3 { color: white; font-size: 20px; margin-bottom: 16px; }
+    .hero-product-preview { display: flex; flex-direction: column; gap: 10px; }
+    .hero-product-item {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;
+    }
+    .hero-product-item .item-icon { font-size: 28px; }
+    .hero-product-item .item-name { color: white; font-weight: 600; font-size: 14px; }
+    .hero-product-item .item-price { color: var(--gold); font-size: 13px; }
+    .hero-product-item .item-tag {
+      margin-left: auto; background: rgba(255,255,255,0.15);
+      color: white; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600;
+    }
+
+    /* ── Trust Strip ────────────────────────────────── */
+    .trust-strip { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 36px 0; }
+    .trust-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+    .trust-item { display: flex; align-items: center; gap: 14px; }
+    .trust-icon { width: 52px; height: 52px; background: var(--green-pale); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .trust-item h4 { font-size: 14px; color: var(--text-dark); font-weight: 700; font-family: 'DM Sans',sans-serif; }
+    .trust-item p { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+
+    /* ── Categories ─────────────────────────────────── */
+    .categories-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    .category-card {
+      background: var(--white); border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow-sm); transition: var(--transition); cursor: pointer;
+      border: 1px solid var(--border); text-align: center; padding: 32px 20px;
+    }
+    .category-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: var(--green-light); }
+    .category-card .cat-icon { font-size: 52px; margin-bottom: 14px; }
+    .category-card h3 { font-size: 16px; color: var(--text-dark); margin-bottom: 6px; }
+    .category-card p { font-size: 13px; color: var(--text-light); }
+    .category-card .cat-count { display: inline-block; background: var(--green-pale); color: var(--green-mid); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-top: 10px; }
+
+    /* ── Products Grid ──────────────────────────────── */
+    .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+
+    /* ── Product Card ───────────────────────────────── */
+    .product-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+      overflow: hidden; transition: var(--transition); position: relative;
+    }
+    .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: var(--green-light); }
+    .product-card-image {
+      height: 200px; position: relative; overflow: hidden;
+      background: var(--green-pale); display: flex; align-items: center; justify-content: center;
+    }
+    .product-img-placeholder { font-size: 80px; transition: transform 0.4s ease; }
+    .product-card:hover .product-img-placeholder { transform: scale(1.15); }
+    .product-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .product-card:hover .product-img { transform: scale(1.1); }
+    .product-badge {
+      position: absolute; top: 12px; left: 12px; z-index: 2;
+      background: var(--green-mid); color: white; font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px;
+    }
+    .product-badge.sale { background: var(--danger); }
+    .product-actions-hover {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      display: flex; gap: 8px; opacity: 0; transition: var(--transition);
+    }
+    .product-card:hover .product-actions-hover { opacity: 1; }
+    .action-btn {
+      width: 40px; height: 40px; border-radius: 50%; background: white;
+      border: none; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; font-size: 16px; box-shadow: var(--shadow-md);
+      transition: var(--transition);
+    }
+    .action-btn:hover { background: var(--green-mid); transform: scale(1.1); }
+    .action-btn.wished { color: #e53e3e; }
+    .product-card-body { padding: 16px; }
+    .product-category { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--green-mid); font-weight: 600; margin-bottom: 6px; }
+    .product-name { font-family: 'Playfair Display',serif; font-size: 15px; color: var(--text-dark); margin-bottom: 8px; font-weight: 600; line-height: 1.3; }
+    .product-rating { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+    .stars { color: var(--gold); font-size: 13px; letter-spacing: 1px; }
+    .rating-count { font-size: 12px; color: var(--text-light); }
+    .product-price-row { display: flex; align-items: center; justify-content: space-between; }
+    .product-price { font-size: 18px; font-weight: 700; color: var(--green-dark); }
+    .product-price span { font-size: 12px; color: var(--text-light); font-weight: 400; }
+    .product-old-price { font-size: 13px; color: var(--text-light); text-decoration: line-through; margin-left: 6px; }
+    .product-add-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--green-mid); color: white; font-size: 20px; font-weight: 700;
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: var(--transition); flex-shrink: 0;
+    }
+    .product-add-btn:hover { background: var(--green-dark); transform: scale(1.1); }
+
+    /* ── Delivery Banner ────────────────────────────── */
+    .delivery-banner { background: var(--green-dark); color: white; padding: 48px 0; }
+    .delivery-banner-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .delivery-option {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius); padding: 28px;
+    }
+    .delivery-option.featured { background: rgba(233,196,106,0.15); border-color: var(--gold); }
+    .delivery-option .delivery-icon { font-size: 40px; margin-bottom: 14px; }
+    .delivery-option h3 { color: white; margin-bottom: 8px; }
+    .delivery-option p { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.7; }
+    .delivery-time-badge {
+      display: inline-block; background: var(--gold); color: var(--green-dark);
+      font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; margin-top: 14px;
+    }
+
+    /* ── Testimonials ───────────────────────────────── */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .testimonial-card {
+      background: var(--white); border-radius: var(--radius); padding: 28px;
+      box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+    }
+    .testimonial-card .stars { font-size: 16px; display: block; margin-bottom: 12px; }
+    .testimonial-card p { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--green-pale); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .author-name { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+    .author-location { font-size: 12px; color: var(--text-light); }
+
+    /* ── Cart Sidebar ───────────────────────────────── */
+    .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1100; }
+    .cart-overlay.active { display: block; }
+    .cart-sidebar {
+      position: fixed; top: 0; right: 0; bottom: 0; width: min(420px,100vw);
+      background: var(--white); z-index: 1200; transform: translateX(100%);
+      transition: var(--transition); display: flex; flex-direction: column;
+      box-shadow: var(--shadow-lg);
+    }
+    .cart-sidebar.open { transform: translateX(0); }
+    .cart-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+    }
+    .cart-header h3 { font-size: 18px; color: var(--text-dark); }
+    .modal-close {
+      width: 36px; height: 36px; border-radius: 50%; background: var(--border);
+      border: none; cursor: pointer; font-size: 20px; display: flex; align-items: center;
+      justify-content: center; color: var(--text-mid); transition: var(--transition);
+    }
+    .modal-close:hover { background: var(--danger); color: white; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+    .cart-empty { text-align: center; padding: 60px 20px; }
+    .cart-empty span { font-size: 48px; display: block; margin-bottom: 12px; }
+    .cart-empty h4 { color: var(--text-dark); margin-bottom: 6px; }
+    .cart-empty p { color: var(--text-light); font-size: 14px; }
+    .cart-item {
+      display: flex; gap: 14px; padding: 14px 0;
+      border-bottom: 1px solid var(--border); align-items: flex-start;
+    }
+    .cart-item-img {
+      width: 60px; height: 60px; border-radius: 10px;
+      background: var(--green-pale); display: flex; align-items: center;
+      justify-content: center; font-size: 28px; flex-shrink: 0; overflow: hidden;
+    }
+    .cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+    .cart-item-price { font-size: 15px; font-weight: 700; color: var(--green-dark); margin-bottom: 8px; }
+    .cart-item-qty { display: flex; align-items: center; gap: 8px; }
+    .qty-btn {
+      width: 28px; height: 28px; border-radius: 50%; background: var(--border);
+      border: none; cursor: pointer; font-size: 16px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; transition: var(--transition);
+    }
+    .qty-btn:hover { background: var(--green-pale); color: var(--green-dark); }
+    .qty-val { font-size: 14px; font-weight: 700; color: var(--text-dark); min-width: 20px; text-align: center; }
+    .cart-remove { margin-left: auto; background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.6; transition: var(--transition); }
+    .cart-remove:hover { opacity: 1; }
+    .cart-footer { padding: 16px 24px; border-top: 1px solid var(--border); }
+    .cart-totals { margin-bottom: 16px; }
+    .cart-total-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--text-mid); margin-bottom: 8px; }
+    .cart-total-row.total { font-size: 16px; font-weight: 700; color: var(--text-dark); border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px; }
+
+    /* ── Toast ──────────────────────────────────────── */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .toast {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--green-dark); color: white;
+      padding: 14px 20px; border-radius: 12px;
+      box-shadow: var(--shadow-lg); font-size: 14px; font-weight: 500;
+      animation: slideInToast 0.3s ease; min-width: 240px; pointer-events: all;
+    }
+    .toast.error   { background: var(--danger); }
+    .toast.warning { background: var(--warning); }
+    .toast.info    { background: #0e4d6e; }
+    .toast-close { margin-left: auto; background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 18px; }
+    @keyframes slideInToast { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* ── Footer ─────────────────────────────────────── */
+    footer { background: var(--green-dark); color: rgba(255,255,255,0.75); padding: 64px 0 0; }
+    .footer-grid { display: grid; grid-template-columns: 2fr repeat(3,1fr); gap: 48px; margin-bottom: 48px; }
+    .footer-brand .brand-name { font-family: 'Playfair Display',serif; font-size: 24px; color: white; margin-bottom: 14px; }
+    .footer-brand p { font-size: 14px; line-height: 1.7; max-width: 280px; }
+    .footer-socials { display: flex; gap: 10px; margin-top: 20px; }
+    .social-link { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 16px; transition: var(--transition); }
+    .social-link:hover { background: var(--green-mid); }
+    .footer-col h4 { color: white; font-size: 14px; font-weight: 700; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.8px; font-family: 'DM Sans',sans-serif; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a { font-size: 14px; color: rgba(255,255,255,0.6); transition: var(--transition); }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-contact-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 12px; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding: 20px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-size: 13px; opacity: 0.6; }
+    .payment-icons { display: flex; gap: 8px; }
+    .pay-icon { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+
+    /* ── Auth buttons ───────────────────────────────── */
+    .nav-btn-outline {
+      padding: 7px 16px; border-radius: 50px; font-size: 13px; font-weight: 600;
+      border: 2px solid var(--green-mid); color: var(--green-mid); background: transparent;
+      cursor: pointer; transition: var(--transition);
+    }
+    .nav-btn-outline:hover { background: var(--green-mid); color: white; }
+    .nav-btn-primary {
+      padding: 7px 16px; border-radius: 50px; font-size: 13px; font-weight: 600;
+      background: var(--green-mid); color: white; border: 2px solid var(--green-mid);
+      cursor: pointer; transition: var(--transition);
+    }
+    .nav-btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+
+    /* ── Category Navbar with Dropdown ─────────────── */
+    .category-navbar {
+      position: sticky; top: var(--navbar-h); z-index: 999;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      height: auto;
+    }
+    .dark .category-navbar { background: var(--white); }
+    .category-navbar {
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .category-navbar::-webkit-scrollbar { display: none; }
+    .category-navbar-inner {
+      display: flex;
+      align-items: center;
+      height: 56px;
+      gap: 0;
+      overflow: visible; /* must be visible so portal dropdowns aren't clipped */
+    }
+    
+    .category-item {
+      position: relative;
+      padding: 0 20px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      color: var(--text-dark);
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+      border-bottom: 3px solid transparent;
+    }
+    .category-item:hover {
+      color: var(--green-mid);
+      border-bottom-color: var(--green-mid);
+    }
+
+    /* Category Dropdown - rendered via portal into body, positioned with JS */
+    .category-dropdown {
+      position: fixed; /* top/left set by JS per item */
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
+      z-index: 99999;
+      min-width: 240px;
+      pointer-events: auto;
+    }
+    #cat-portal-index { position:fixed; top:0; left:0; width:0; height:0; z-index:99999; pointer-events:none; }
+    #cat-portal-index .category-dropdown { pointer-events: auto; }
+
+    .dropdown-header {
+      display: block;
+      padding: 12px 16px;
+      font-weight: 700;
+      color: var(--green-dark);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dropdown-items {
+      display: flex;
+      flex-direction: column;
+      padding: 8px 0;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--text-mid);
+      font-size: 14px;
+      transition: var(--transition);
+      cursor: pointer;
+      border-left: 3px solid transparent;
+    }
+    .dropdown-item:hover {
+      background: var(--green-pale);
+      color: var(--green-dark);
+      border-left-color: var(--green-mid);
+    }
+
+    .dropdown-item-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .dropdown-item-text {
+      flex: 1;
+    }
+
+    .dropdown-item-count {
+      font-size: 11px;
+      background: var(--green-pale);
+      color: var(--green-mid);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    .dropdown-view-all {
+      display: block;
+      padding: 12px 16px;
+      text-align: center;
+      background: var(--green-pale);
+      color: var(--green-mid);
+      font-weight: 600;
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+      transition: var(--transition);
+      border-radius: 0 0 8px 8px;
+    }
+    .dropdown-view-all:hover {
+      background: var(--green-mid);
+      color: white;
+    }
+
+    /* ── Responsive ─────────────────────────────────── */
+    @media (max-width: 1200px) {
+      .products-grid { grid-template-columns: repeat(3,1fr); }
+    }
+    @media (max-width: 1024px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .categories-grid { grid-template-columns: repeat(2,1fr); }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-content { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .hero { min-height: auto; }
+      .hero-stats { gap: 20px; flex-wrap: wrap; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .trust-grid { grid-template-columns: 1fr 1fr; }
+      .delivery-banner-inner { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+      .products-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
+      .product-card-image { height: 160px; }
+      .categories-grid { grid-template-columns: repeat(2,1fr); }
+      .trust-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════ NAVBAR ════ -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a class="navbar-brand" href="index.html">
+          <div class="logo-icon">🐟</div>
+          <div class="brand-text">
+            <span>DOKKHINMART</span>
+            <small>FRESH FROM SOURCE</small>
+          </div>
+        </a>
+
+        <div class="nav-links">
+          <a href="index.html" class="active">Home</a>
+          <a href="pages/shop.html">Shop</a>
+          <a href="pages/about.html">About Us</a>
+          <a href="pages/contact.html">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <button class="nav-icon-btn" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+          <button class="nav-icon-btn" title="Wishlist" onclick="window.location.href='pages/wishlist.html'">
+            🤍<span class="badge" id="wishlist-badge" style="display:none"></span>
+          </button>
+          <button class="nav-icon-btn" onclick="openCart()" title="Cart">
+            🛒<span class="badge" id="cart-badge" style="display:none"></span>
+          </button>
+          <div id="auth-btns" style="display:flex;gap:8px;">
+            <a href="pages/auth.html" class="nav-btn-outline">Login</a>
+            <a href="pages/auth.html" class="nav-btn-primary">Register</a>
+          </div>
+          <div id="user-menu" style="display:none;align-items:center;gap:8px;">
+            <a href="pages/profile.html" class="nav-btn-outline">👤 <span id="user-name-nav"></span></a>
+            <button class="nav-btn-outline" onclick="logout()">Logout</button>
+          </div>
+          <button class="hamburger" onclick="toggleMobileNav()">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile overlay & nav -->
+  <div id="mobile-overlay" class="mobile-overlay" onclick="closeMobileNav()"></div>
+  <div id="mobile-nav" class="mobile-nav">
+    <a href="index.html" onclick="closeMobileNav()">🏠 Home</a>
+    <a href="pages/shop.html" onclick="closeMobileNav()">🛒 Shop</a>
+    <a href="pages/about.html" onclick="closeMobileNav()">ℹ️ About Us</a>
+    <a href="pages/contact.html" onclick="closeMobileNav()">📞 Contact</a>
+    <div class="mobile-nav-divider"></div>
+    <a href="pages/auth.html" onclick="closeMobileNav()">👤 Login / Register</a>
+    <a href="pages/wishlist.html" onclick="closeMobileNav()">❤️ Wishlist</a>
+    <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+  </div>
+
+  <!-- ════ CATEGORY NAVBAR with DROPDOWN ════ -->
+  <nav class="category-navbar">
+    <div class="container" style="padding: 0 24px;">
+      <div class="category-navbar-inner" id="category-navbar">
+        <!-- Categories will be dynamically inserted here -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════ CART SIDEBAR ════ -->
+  <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
+  <div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+      <h3>🛒 Your Cart</h3>
+      <button class="modal-close" onclick="closeCart()">×</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer" id="cart-footer" style="display:none;">
+      <div class="cart-totals">
+        <div class="cart-total-row"><span>Subtotal</span><span id="cart-subtotal">৳0</span></div>
+        <div class="cart-total-row"><span>Delivery</span><span id="cart-delivery">৳50</span></div>
+        <div class="cart-total-row total"><span>Total</span><span id="cart-total">৳0</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">Free delivery on orders over ৳1000</p>
+      <a href="pages/checkout.html" class="btn btn-primary btn-block">Proceed to Checkout →</a>
+    </div>
+  </div>
+
+  <!-- ════ HERO ════ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-badge">🌿 100% Natural &amp; Fresh</div>
+          <h1>Fresh Fish &amp; <span>Pure Honey</span> – Direct from Source</h1>
+          <p>Farm-fresh fish and natural honey delivered to your doorstep within 12–24 hours. No preservatives, no compromise — just pure, authentic quality.</p>
+          <div class="hero-actions">
+            <a href="pages/shop.html" class="btn btn-gold btn-lg">🛒 Shop Now</a>
+            <a href="pages/about.html" class="btn btn-outline btn-lg">Learn More</a>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <strong>1,200+</strong>
+              <span>Happy Customers</span>
+            </div>
+            <div class="hero-stat">
+              <strong>50+</strong>
+              <span>Products</span>
+            </div>
+            <div class="hero-stat">
+              <strong>12h</strong>
+              <span>Fast Delivery</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-card-float">
+            <h3>🔥 Today's Picks</h3>
+            <div class="hero-product-preview">
+              <div class="hero-product-item">
+                <span class="item-icon">🐟</span>
+                <div>
+                  <div class="item-name">Fresh Hilsa Fish</div>
+                  <div class="item-price">৳850 / kg</div>
+                </div>
+                <span class="item-tag">In Stock</span>
+              </div>
+              <div class="hero-product-item">
+                <span class="item-icon">🍯</span>
+                <div>
+                  <div class="item-name">Wild Honey (Raw)</div>
+                  <div class="item-price">৳650 / kg</div>
+                </div>
+                <span class="item-tag">Organic</span>
+              </div>
+              <div class="hero-product-item">
+                <span class="item-icon">🎁</span>
+                <div>
+                  <div class="item-name">Hilsa + Honey Combo</div>
+                  <div class="item-price">৳1,150</div>
+                </div>
+                <span class="item-tag">Best Value</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ TRUST STRIP ════ -->
+  <section class="trust-strip">
+    <div class="container">
+      <div class="trust-grid">
+        <div class="trust-item">
+          <div class="trust-icon">🚚</div>
+          <div>
+            <h4>Fast Delivery</h4>
+            <p>12h express or 24h standard delivery</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">✅</div>
+          <div>
+            <h4>100% Fresh</h4>
+            <p>Sourced daily, no preservatives</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">💳</div>
+          <div>
+            <h4>Secure Payments</h4>
+            <p>bKash, Nagad, COD &amp; Card</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">📞</div>
+          <div>
+            <h4>24/7 Support</h4>
+            <p>WhatsApp &amp; phone support</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CATEGORIES ════ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Browse Categories</span>
+        <h2>Shop by Category</h2>
+        <p>Find exactly what you're looking for — from river-fresh fish to natural honey</p>
+      </div>
+      <div class="categories-grid">
+        <div class="category-card" onclick="window.location.href='pages/shop.html?category=fresh-fish'">
+          <div class="cat-icon">🐟</div>
+          <h3>Fresh Fish</h3>
+          <p>Farm & river fresh varieties</p>
+          <span class="cat-count">15+ Products</span>
+        </div>
+        <div class="category-card" onclick="window.location.href='pages/shop.html?category=pure-honey'">
+          <div class="cat-icon">🍯</div>
+          <h3>Pure Honey</h3>
+          <p>Natural, unfiltered honey</p>
+          <span class="cat-count">8+ Products</span>
+        </div>
+        <div class="category-card" onclick="window.location.href='pages/shop.html?category=hilsa-fish'">
+          <div class="cat-icon">🐡</div>
+          <h3>Hilsa Fish</h3>
+          <p>Premium Ilish from the river</p>
+          <span class="cat-count">5+ Products</span>
+        </div>
+        <div class="category-card" onclick="window.location.href='pages/shop.html?category=combo-offers'">
+          <div class="cat-icon">🎁</div>
+          <h3>Combo Offers</h3>
+          <p>Great value bundles</p>
+          <span class="cat-count">6+ Products</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ FEATURED PRODUCTS ════ -->
+  <section class="section" style="background: var(--white); border-top: 1px solid var(--border);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Featured Products</span>
+        <h2>Our Best Sellers</h2>
+        <p>Hand-picked fresh products loved by our customers</p>
+      </div>
+      <div class="products-grid" id="featured-products">
+        <!-- JS rendered below for demo products -->
+      </div>
+      <div style="text-align:center;margin-top:40px;">
+        <a href="pages/shop.html" class="btn btn-primary btn-lg">View All Products →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ DELIVERY BANNER ════ -->
+  <section class="delivery-banner">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:36px;">
+        <span style="color:var(--gold);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Fast Delivery</span>
+        <h2 style="color:white;margin-top:8px;">Choose Your Delivery Speed</h2>
+      </div>
+      <div class="delivery-banner-inner">
+        <div class="delivery-option featured">
+          <div class="delivery-icon">⚡</div>
+          <h3>Express Delivery</h3>
+          <p>Order before 6:30 AM or 6:30 PM and receive your fresh products within 12 hours. Perfect for urgent needs.</p>
+          <span class="delivery-time-badge">Within 12 Hours</span>
+          <div style="margin-top:14px;font-size:13px;color:rgba(255,255,255,0.7);">Charge: ৳80 &nbsp;|&nbsp; Cutoff: 6:30 AM &amp; 6:30 PM</div>
+        </div>
+        <div class="delivery-option">
+          <div class="delivery-icon">🚚</div>
+          <h3>Standard Delivery</h3>
+          <p>Scheduled next-day delivery for your fresh order. Free delivery on orders above ৳1000.</p>
+          <span class="delivery-time-badge">Within 24 Hours</span>
+          <div style="margin-top:14px;font-size:13px;color:rgba(255,255,255,0.7);">Charge: ৳50 &nbsp;|&nbsp; Free above ৳1000</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ TESTIMONIALS ════ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Customer Reviews</span>
+        <h2>What Our Customers Say</h2>
+        <p>Trusted by over 1,200 happy customers across Dhaka</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <span class="stars">★★★★★</span>
+          <p>"The Hilsa fish was incredibly fresh — arrived within hours and tasted amazing. This is now my go-to shop for fish!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">👩</div>
+            <div>
+              <div class="author-name">Fatema Begum</div>
+              <div class="author-location">Mirpur, Dhaka</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <span class="stars">★★★★★</span>
+          <p>"The Sidr honey from DOKKHINMART is the real deal. Dark golden, rich aroma, no adulteration. Highly recommended!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">👨</div>
+            <div>
+              <div class="author-name">Rahim Uddin</div>
+              <div class="author-location">Dhanmondi, Dhaka</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <span class="stars">★★★★⯨</span>
+          <p>"Ordered the Hilsa + Honey combo pack — great value! Everything was well-packaged and delivered on time. Will order again."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">👩</div>
+            <div>
+              <div class="author-name">Nasrin Akter</div>
+              <div class="author-location">Uttara, Dhaka</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-name">🐟 DOKKHINMART</div>
+          <p>Fresh Fish &amp; Pure Honey delivered directly from the source to your doorstep. Quality you can taste, freshness you can trust.</p>
+          <div class="footer-socials">
+            <a href="#" class="social-link">📘</a>
+            <a href="#" class="social-link">📸</a>
+            <a href="https://wa.me/8801700000000" class="social-link" target="_blank">💬</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pages/shop.html">Shop</a></li>
+            <li><a href="pages/about.html">About Us</a></li>
+            <li><a href="pages/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Categories</h4>
+          <ul>
+            <li><a href="pages/shop.html?category=fresh-fish">Fresh Fish</a></li>
+            <li><a href="pages/shop.html?category=pure-honey">Pure Honey</a></li>
+            <li><a href="pages/shop.html?category=hilsa-fish">Hilsa Fish</a></li>
+            <li><a href="pages/shop.html?category=combo-offers">Combo Offers</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <div class="footer-contact-item"><span>📞</span><span>+880 17 0000 0000</span></div>
+          <div class="footer-contact-item"><span>📧</span><span>info@DOKKHINMART.com</span></div>
+          <div class="footer-contact-item"><span>📍</span><span>Dhaka, Bangladesh</span></div>
+          <div class="footer-contact-item"><span>⏰</span><span>Delivery: 6AM – 10PM</span></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 DOKKHINMART. All rights reserved.</p>
+        <div class="payment-icons">
+          <span class="pay-icon">💵 COD</span>
+          <span class="pay-icon">📱 bKash</span>
+          <span class="pay-icon">📱 Nagad</span>
+          <span class="pay-icon">💳 Card</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ════ TOAST CONTAINER ════ -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ════ JAVASCRIPT ════ -->
+  <script>
+    // ── State ─────────────────────────────────────────
+    const state = {
+      cart:     JSON.parse(localStorage.getItem('fm_cart')     || '[]'),
+      wishlist: JSON.parse(localStorage.getItem('fm_wishlist') || '[]'),
+      user:     JSON.parse(localStorage.getItem('fm_user')     || 'null'),
+      token:    localStorage.getItem('fm_token')               || null,
+      darkMode: localStorage.getItem('fm_dark') === 'true',
+    };
+
+    // ── Persist ───────────────────────────────────────
+    function saveCart()     { localStorage.setItem('fm_cart',     JSON.stringify(state.cart)); updateCartUI(); }
+    function saveWishlist() { localStorage.setItem('fm_wishlist', JSON.stringify(state.wishlist)); }
+
+    // ── Toast ─────────────────────────────────────────
+    function toast(msg, type = 'success') {
+      const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+      const container = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      t.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span><button class="toast-close" onclick="this.parentElement.remove()">×</button>`;
+      container.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(100%)'; t.style.transition = 'all 0.3s'; }, 3200);
+      setTimeout(() => t.remove(), 3600);
+    }
+
+    // ── Product helpers ───────────────────────────────
+    function getEmoji(name = '') {
+      const n = name.toLowerCase();
+      if (n.includes('hilsa') || n.includes('ilish')) return '🐟';
+      if (n.includes('rohu'))  return '🐠';
+      if (n.includes('catfish') || n.includes('magur')) return '🐡';
+      if (n.includes('pangasius')) return '🐟';
+      if (n.includes('honey') || n.includes('sidr')) return '🍯';
+      if (n.includes('combo')) return '🎁';
+      return '🛒';
+    }
+    function renderStars(r) {
+      const f = Math.floor(r), h = r % 1 >= 0.5 ? 1 : 0, e = 5 - f - h;
+      return '★'.repeat(f) + (h ? '⯨' : '') + '☆'.repeat(e);
+    }
+
+    // ── Static demo products (no server required) ─────
+    const DEMO_PRODUCTS = [
+      { id:1, name:'Fresh Hilsa Fish (Ilish)', category_name:'Hilsa Fish', price:850, sale_price:null, unit:'kg', is_featured:true, avg_rating:4.8, review_count:245, thumbnail:null, slug:'fresh-hilsa-fish' },
+      { id:2, name:'Fresh Rohu Fish',          category_name:'Fresh Fish', price:280, sale_price:null, unit:'kg', is_featured:true, avg_rating:4.5, review_count:312, thumbnail:null, slug:'fresh-rohu-fish' },
+      { id:3, name:'Wild Honey (Raw)',          category_name:'Pure Honey', price:650, sale_price:580, unit:'kg', is_featured:true, avg_rating:4.9, review_count:189, thumbnail:null, slug:'wild-honey-raw' },
+      { id:4, name:'Sidr Honey (Sundarbans)',   category_name:'Pure Honey', price:1200, sale_price:null, unit:'kg', is_featured:true, avg_rating:5.0, review_count:145, thumbnail:null, slug:'sidr-honey' },
+      { id:5, name:'Catfish (Magur)',           category_name:'Catfish',    price:380, sale_price:null, unit:'kg', is_featured:false, avg_rating:4.3, review_count:98,  thumbnail:null, slug:'catfish-magur' },
+      { id:6, name:'Fresh Pangasius Fish',      category_name:'Fresh Fish', price:220, sale_price:null, unit:'kg', is_featured:false, avg_rating:4.4, review_count:423, thumbnail:null, slug:'fresh-pangasius' },
+      { id:7, name:'Hilsa + Honey Combo',       category_name:'Combo Offers', price:1150, sale_price:null, unit:'piece', is_featured:true, avg_rating:4.7, review_count:67, thumbnail:null, slug:'hilsa-honey-combo' },
+      { id:8, name:'Rohu + Wild Honey Combo',   category_name:'Combo Offers', price:900, sale_price:820, unit:'piece', is_featured:false, avg_rating:4.6, review_count:55, thumbnail:null, slug:'rohu-honey-combo' },
+    ];
+
+    function renderProductCard(p) {
+      const wished = state.wishlist.some(i => i.id == p.id);
+      const price  = p.sale_price || p.price;
+      const hasDisc = p.sale_price && Number(p.sale_price) < Number(p.price);
+      const discPct = hasDisc ? Math.round((1 - p.sale_price / p.price) * 100) : 0;
+      const pJson   = JSON.stringify(p).replace(/"/g,'&quot;');
+
+      // Use local image from /products/ folder if exists, else emoji placeholder
+      const imgSrc = `products/${p.slug}.jpg`;
+
+      return `
+      <div class="product-card" data-id="${p.id}">
+        <div class="product-card-image">
+          ${hasDisc ? `<span class="product-badge sale">-${discPct}%</span>` : p.is_featured ? `<span class="product-badge">Featured</span>` : ''}
+          <img src="${imgSrc}" alt="${p.name}" class="product-img"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="product-img-placeholder" style="display:none">${getEmoji(p.name)}</div>
+          <div class="product-actions-hover">
+            <button class="action-btn ${wished?'wished':''}" onclick="toggleWishlistBtn(event,${pJson},this)">${wished?'❤️':'🤍'}</button>
+            <button class="action-btn" onclick="addToCart(${pJson})">🛒</button>
+          </div>
+        </div>
+        <div class="product-card-body">
+          <div class="product-category">${p.category_name}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-rating">
+            <span class="stars">${renderStars(Number(p.avg_rating)||0)}</span>
+            <span class="rating-count">(${p.review_count||0})</span>
+          </div>
+          <div class="product-price-row">
+            <div>
+              <span class="product-price">৳${Number(price).toLocaleString()} <span>/${p.unit}</span></span>
+              ${hasDisc ? `<span class="product-old-price">৳${Number(p.price).toLocaleString()}</span>` : ''}
+            </div>
+            <button class="product-add-btn" onclick="addToCart(${pJson})">+</button>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function loadFeaturedProducts() {
+      const el = document.getElementById('featured-products');
+      if (!el) return;
+      const featured = DEMO_PRODUCTS.filter(p => p.is_featured);
+      el.innerHTML = featured.map(p => renderProductCard(p)).join('');
+    }
+
+    // ── Category Navbar Dropdown ──────────────────────
+    // Category data structure with emojis and subcategories
+    const CATEGORIES_DATA = [
+      {
+        name: 'Honey',
+        emoji: '🍯',
+        slug: 'honey',
+        subcategories: [
+          { name: 'Raw Honey', emoji: '🐝', slug: 'raw-honey', count: 5 },
+          { name: 'Sidr Honey', emoji: '✨', slug: 'sidr-honey', count: 3 },
+          { name: 'Clover Honey', emoji: '🌼', slug: 'clover-honey', count: 4 },
+          { name: 'Forest Honey', emoji: '🌳', slug: 'forest-honey', count: 3 }
+        ]
+      },
+      {
+        name: 'Fresh Fish',
+        emoji: '🐟',
+        slug: 'fresh-fish',
+        subcategories: [
+          { name: 'Hilsa Fish (Ilish)', emoji: '🐟', slug: 'hilsa-fish', count: 8 },
+          { name: 'Rohu Fish', emoji: '🐠', slug: 'rohu-fish', count: 6 },
+          { name: 'Catfish (Magur)', emoji: '🐡', slug: 'catfish', count: 4 },
+          { name: 'Pangasius Fish', emoji: '🐟', slug: 'pangasius', count: 5 }
+        ]
+      },
+      {
+        name: 'Seafood',
+        emoji: '🦐',
+        slug: 'seafood',
+        subcategories: [
+          { name: 'Shrimp (Chingri)', emoji: '🦐', slug: 'shrimp', count: 7 },
+          { name: 'Crab', emoji: '🦀', slug: 'crab', count: 4 },
+          { name: 'Prawn', emoji: '🦞', slug: 'prawn', count: 5 },
+          { name: 'Mixed Seafood', emoji: '🦑', slug: 'mixed-seafood', count: 3 }
+        ]
+      },
+      {
+        name: 'Dried Fish',
+        emoji: '🐟‍💨',
+        slug: 'dried-fish',
+        subcategories: [
+          { name: 'Dried Small Fish', emoji: '🐟', slug: 'dried-small', count: 4 },
+          { name: 'Dried Anchovies', emoji: '🐟', slug: 'dried-anchovies', count: 3 },
+          { name: 'Dried Shrimp', emoji: '🦐', slug: 'dried-shrimp', count: 5 },
+          { name: 'Smoked Fish', emoji: '🔥', slug: 'smoked-fish', count: 2 }
+        ]
+      },
+      {
+        name: 'Local Groceries',
+        emoji: '🥬',
+        slug: 'groceries',
+        subcategories: [
+          { name: 'Vegetables', emoji: '🥕', slug: 'vegetables', count: 12 },
+          { name: 'Spices & Masalas', emoji: '🌶️', slug: 'spices', count: 8 },
+          { name: 'Rice & Grains', emoji: '🌾', slug: 'rice', count: 6 },
+          { name: 'Oils & Ghee', emoji: '🫒', slug: 'oils', count: 4 }
+        ]
+      },
+      {
+        name: 'Combo Offers',
+        emoji: '🎁',
+        slug: 'combo-offers',
+        subcategories: [
+          { name: 'Fish + Honey Bundle', emoji: '🎁', slug: 'fish-honey-bundle', count: 3 },
+          { name: 'Mixed Seafood Bundle', emoji: '🎁', slug: 'seafood-bundle', count: 4 },
+          { name: 'Grocery Combo', emoji: '🎁', slug: 'grocery-bundle', count: 5 },
+          { name: 'Premium Gift Box', emoji: '🎀', slug: 'premium-box', count: 2 }
+        ]
+      }
+    ];
+
+    function loadCategoryNavbar() {
+      const navContainer = document.getElementById('category-navbar');
+      if (!navContainer) return;
+
+      // Render trigger items only — no inline dropdowns
+      navContainer.innerHTML = CATEGORIES_DATA.map(cat => `
+        <div class="category-item" data-cat="${cat.slug}">
+          <span>${cat.emoji} ${cat.name}</span>
+        </div>
+      `).join('');
+
+      // Build portal at body level — outside every stacking context
+      let portal = document.getElementById('cat-portal-index');
+      if (!portal) {
+        portal = document.createElement('div');
+        portal.id = 'cat-portal-index';
+        document.body.appendChild(portal);
+      }
+      portal.innerHTML = '';
+
+      CATEGORIES_DATA.forEach(cat => {
+        const dd = document.createElement('div');
+        dd.className = 'category-dropdown';
+        dd.dataset.cat = cat.slug;
+        dd.innerHTML =
+          '<div class="dropdown-header">' + cat.name.toUpperCase() + '</div>' +
+          '<div class="dropdown-items">' +
+          cat.subcategories.map(sub =>
+            '<a href="pages/shop.html?category=' + sub.slug + '" class="dropdown-item">' +
+            '<span class="dropdown-item-icon">' + sub.emoji + '</span>' +
+            '<span class="dropdown-item-text">' + sub.name + '</span>' +
+            '<span class="dropdown-item-count">' + sub.count + '</span>' +
+            '</a>'
+          ).join('') +
+          '</div>' +
+          '<a href="pages/shop.html?category=' + cat.slug + '" class="dropdown-view-all">View All ' + cat.name + '</a>';
+        portal.appendChild(dd);
+      });
+
+      let hideTimer = null;
+
+      function showDrop(slug, triggerEl) {
+        clearTimeout(hideTimer);
+        portal.querySelectorAll('.category-dropdown').forEach(d => {
+          d.style.opacity = '0'; d.style.visibility = 'hidden'; d.style.transform = 'translateY(-10px)';
+        });
+        document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+        const dd = portal.querySelector('.category-dropdown[data-cat="' + slug + '"]');
+        if (!dd) return;
+        const rect = triggerEl.getBoundingClientRect();
+        dd.style.top = (rect.bottom + 2) + 'px';
+        dd.style.left = rect.left + 'px';
+        dd.style.opacity = '1';
+        dd.style.visibility = 'visible';
+        dd.style.transform = 'translateY(0)';
+        dd.style.transition = 'opacity 0.2s ease, transform 0.2s ease, visibility 0s 0s';
+        triggerEl.classList.add('active');
+      }
+
+      function hideDrop(slug, triggerEl) {
+        hideTimer = setTimeout(function() {
+          const dd = portal.querySelector('.category-dropdown[data-cat="' + slug + '"]');
+          if (dd) { dd.style.opacity = '0'; dd.style.visibility = 'hidden'; dd.style.transform = 'translateY(-10px)'; dd.style.transition = 'opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s'; }
+          if (triggerEl) triggerEl.classList.remove('active');
+        }, 120);
+      }
+
+      document.querySelectorAll('.category-item[data-cat]').forEach(function(item) {
+        const slug = item.dataset.cat;
+        item.addEventListener('mouseenter', function() { showDrop(slug, item); });
+        item.addEventListener('mouseleave', function() { hideDrop(slug, item); });
+        const dd = portal.querySelector('.category-dropdown[data-cat="' + slug + '"]');
+        if (dd) {
+          dd.addEventListener('mouseenter', function() { clearTimeout(hideTimer); });
+          dd.addEventListener('mouseleave', function() { hideDrop(slug, item); });
+        }
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.category-item') && !e.target.closest('.category-dropdown')) {
+          portal.querySelectorAll('.category-dropdown').forEach(function(d) {
+            d.style.opacity = '0'; d.style.visibility = 'hidden'; d.style.transform = 'translateY(-10px)';
+          });
+          document.querySelectorAll('.category-item').forEach(function(i) { i.classList.remove('active'); });
+        }
+      });
+    }
+
+    function loadFeaturedProducts() {
+      const el = document.getElementById('featured-products');
+      if (!el) return;
+      const featured = DEMO_PRODUCTS.filter(p => p.is_featured);
+      el.innerHTML = featured.map(p => renderProductCard(p)).join('');
+    }
+
+    // ── Cart ──────────────────────────────────────────
+    function addToCart(product, qty = 1) {
+      const existing = state.cart.find(i => i.id == product.id);
+      if (existing) existing.quantity += qty;
+      else state.cart.push({ ...product, quantity: qty });
+      saveCart();
+      toast(`${product.name} added to cart! 🛒`);
+      openCart();
+    }
+    function removeFromCart(id) {
+      state.cart = state.cart.filter(i => i.id != id);
+      saveCart(); renderCartItems();
+    }
+    function updateQty(id, delta) {
+      const item = state.cart.find(i => i.id == id);
+      if (!item) return;
+      item.quantity = Math.max(1, item.quantity + delta);
+      saveCart(); renderCartItems();
+    }
+    function getCartCount()    { return state.cart.reduce((s,i) => s + i.quantity, 0); }
+    function getCartTotalRaw() { return state.cart.reduce((s,i) => s + ((Number(i.sale_price)||Number(i.price)) * i.quantity), 0); }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cart-badge');
+      const count = getCartCount();
+      if (badge) { badge.textContent = count || ''; badge.style.display = count ? '' : 'none'; }
+      renderCartItems();
+    }
+    function openCart()  { document.getElementById('cart-sidebar')?.classList.add('open');    document.getElementById('cart-overlay')?.classList.add('active'); }
+    function closeCart() { document.getElementById('cart-sidebar')?.classList.remove('open'); document.getElementById('cart-overlay')?.classList.remove('active'); }
+
+    function renderCartItems() {
+      const el     = document.getElementById('cart-items');
+      const footer = document.getElementById('cart-footer');
+      if (!el) return;
+      if (!state.cart.length) {
+        el.innerHTML = `<div class="cart-empty"><span>🛒</span><h4>Your cart is empty</h4><p>Add some fresh products!</p></div>`;
+        if (footer) footer.style.display = 'none';
+        return;
+      }
+      if (footer) footer.style.display = 'block';
+      el.innerHTML = state.cart.map(item => {
+        const price = Number(item.sale_price) || Number(item.price);
+        return `
+        <div class="cart-item">
+          <div class="cart-item-img">${getEmoji(item.name)}</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">৳${(price * item.quantity).toLocaleString()}</div>
+            <div class="cart-item-qty">
+              <button class="qty-btn" onclick="updateQty(${item.id},-1)">−</button>
+              <span class="qty-val">${item.quantity}</span>
+              <button class="qty-btn" onclick="updateQty(${item.id},1)">+</button>
+              <button class="cart-remove" onclick="removeFromCart(${item.id})">🗑</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+      const subtotal = getCartTotalRaw();
+      const delivery = subtotal >= 1000 ? 0 : 50;
+      document.getElementById('cart-subtotal').textContent = `৳${subtotal.toLocaleString()}`;
+      document.getElementById('cart-delivery').textContent = delivery === 0 ? 'FREE' : `৳${delivery}`;
+      document.getElementById('cart-total').textContent    = `৳${(subtotal + delivery).toLocaleString()}`;
+    }
+
+    // ── Wishlist ──────────────────────────────────────
+    function isWished(id) { return state.wishlist.some(i => i.id == id); }
+    function toggleWishlistBtn(e, product, btn) {
+      e.stopPropagation();
+      const idx = state.wishlist.findIndex(i => i.id == product.id);
+      if (idx > -1) {
+        state.wishlist.splice(idx, 1);
+        btn.textContent = '🤍'; btn.classList.remove('wished');
+        toast('Removed from wishlist', 'info');
+      } else {
+        state.wishlist.push(product);
+        btn.textContent = '❤️'; btn.classList.add('wished');
+        toast('Added to wishlist ❤️');
+      }
+      saveWishlist();
+      const wb = document.getElementById('wishlist-badge');
+      if (wb) { wb.textContent = state.wishlist.length || ''; wb.style.display = state.wishlist.length ? '' : 'none'; }
+    }
+
+    // ── Auth ──────────────────────────────────────────
+    function isLoggedIn() { return !!state.token && !!state.user; }
+    function logout() {
+      state.user = null; state.token = null;
+      localStorage.removeItem('fm_token'); localStorage.removeItem('fm_user');
+      updateAuthUI(); toast('Logged out', 'info');
+    }
+    function updateAuthUI() {
+      const authBtns = document.getElementById('auth-btns');
+      const userMenu = document.getElementById('user-menu');
+      const userName = document.getElementById('user-name-nav');
+      if (isLoggedIn()) {
+        if (authBtns) authBtns.style.display = 'none';
+        if (userMenu) userMenu.style.display = 'flex';
+        if (userName) userName.textContent = state.user?.name?.split(' ')[0] || 'Profile';
+      } else {
+        if (authBtns) authBtns.style.display = 'flex';
+        if (userMenu) userMenu.style.display = 'none';
+      }
+    }
+
+    // ── Dark Mode ─────────────────────────────────────
+    function toggleDarkMode() {
+      state.darkMode = !state.darkMode;
+      document.documentElement.classList.toggle('dark', state.darkMode);
+      localStorage.setItem('fm_dark', state.darkMode);
+      const btn = document.getElementById('dark-toggle');
+      if (btn) btn.textContent = state.darkMode ? '☀️' : '🌙';
+    }
+
+    // ── Mobile Nav ────────────────────────────────────
+    function toggleMobileNav() {
+      document.getElementById('mobile-nav')?.classList.toggle('open');
+      document.getElementById('mobile-overlay')?.classList.toggle('active');
+    }
+    function closeMobileNav() {
+      document.getElementById('mobile-nav')?.classList.remove('open');
+      document.getElementById('mobile-overlay')?.classList.remove('active');
+    }
+
+    // ── Live Chat Widget ──────────────────────────────
+    function renderLiveChat() {
+      if (document.getElementById('live-chat-root')) return;
+      const el = document.createElement('div');
+      el.id = 'live-chat-root';
+      document.body.appendChild(el);
+      el.innerHTML = `
+      <div id="live-chat-widget">
+        <button id="live-chat-toggle" onclick="toggleLiveChat()" title="Live Support" aria-label="Open Live Chat">
+          <svg id="chat-icon-open" width="26" height="26" viewBox="0 0 24 24" fill="none" style="display:block">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+            <circle cx="9" cy="10" r="1" fill="white"/><circle cx="12" cy="10" r="1" fill="white"/><circle cx="15" cy="10" r="1" fill="white"/>
+          </svg>
+          <svg id="chat-icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none">
+            <path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span id="chat-unread-dot"></span>
+        </button>
+        <div id="live-chat-panel" style="display:none;">
+          <div class="lc-header">
+            <div class="lc-header-info">
+              <div class="lc-avatar">🐟</div>
+              <div>
+                <div class="lc-title">DokkhinMart Support</div>
+                <div class="lc-status"><span class="lc-online-dot"></span> Online now</div>
+              </div>
+            </div>
+            <button onclick="toggleLiveChat()" class="lc-close-btn">✕</button>
+          </div>
+          <div class="lc-messages" id="lc-messages">
+            <div class="lc-msg bot">
+              <div class="lc-bubble">হাই! 👋 DokkhinMart-এ স্বাগতম।<br>আমরা কীভাবে সাহায্য করতে পারি?</div>
+              <div class="lc-time">Just now</div>
+            </div>
+          </div>
+          <div class="lc-quick-replies" id="lc-quick-replies">
+            <button onclick="lcQuickReply('ডেলিভারি সম্পর্কে জানতে চাই')">🚚 ডেলিভারি</button>
+            <button onclick="lcQuickReply('মাছের দাম জানতে চাই')">🐟 মাছের দাম</button>
+            <button onclick="lcQuickReply('অর্ডার ট্র্যাক করতে চাই')">📦 অর্ডার ট্র্যাক</button>
+            <button onclick="lcQuickReply('মধুর মান সম্পর্কে')">🍯 মধু</button>
+          </div>
+          <div class="lc-input-bar">
+            <input type="text" id="lc-input" placeholder="Type a message…" onkeydown="if(event.key==='Enter')lcSend()"/>
+            <button onclick="lcSend()" class="lc-send-btn" aria-label="Send">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>`;
+    }
+    const lcBotReplies = {
+      'ডেলিভারি': 'আমরা ঢাকা ও আশেপাশের এলাকায় প্রতিদিন সকাল ৬টা – রাত ১০টার মধ্যে ডেলিভারি দিই। ৳৫০০+ অর্ডারে ফ্রি ডেলিভারি! 🚚',
+      'মাছ': 'আমাদের সব মাছ তাজা ও সরাসরি সুন্দরবন থেকে আনা হয়। ইলিশ, চিংড়ি, ভেটকি সব পাওয়া যায়। Shop পেজ দেখুন! 🐟',
+      'অর্ডার': 'আপনার অর্ডার ট্র্যাক করতে Profile পেজে যান অথবা হোয়াটসঅ্যাপে যোগাযোগ করুন: +880 17 0000 0000 📦',
+      'মধু': 'আমাদের মধু ১০০% খাঁটি সুন্দরবনের মধু। কোনো কৃত্রিম উপাদান নেই। Shop পেজ দেখুন 🍯',
+      'default': 'ধন্যবাদ! আরো সাহায্যের জন্য: 📞 +880 17 0000 0000 বা info@dokkhinmart.com'
+    };
+    function toggleLiveChat() {
+      const panel = document.getElementById('live-chat-panel');
+      const openIcon = document.getElementById('chat-icon-open');
+      const closeIcon = document.getElementById('chat-icon-close');
+      const isOpen = panel.style.display !== 'none';
+      panel.style.display = isOpen ? 'none' : 'flex';
+      openIcon.style.display = isOpen ? 'block' : 'none';
+      closeIcon.style.display = isOpen ? 'none' : 'block';
+      if (!isOpen) document.getElementById('lc-input')?.focus();
+    }
+    function lcSend() {
+      const input = document.getElementById('lc-input');
+      const text = input?.value.trim();
+      if (!text) return;
+      input.value = '';
+      lcAddMsg(text, 'user');
+      document.getElementById('lc-quick-replies').style.display = 'none';
+      setTimeout(() => {
+        const key = Object.keys(lcBotReplies).find(k => text.includes(k)) || 'default';
+        lcAddMsg(lcBotReplies[key], 'bot');
+      }, 600);
+    }
+    function lcQuickReply(text) {
+      document.getElementById('lc-quick-replies').style.display = 'none';
+      lcAddMsg(text, 'user');
+      setTimeout(() => {
+        const key = Object.keys(lcBotReplies).find(k => text.includes(k)) || 'default';
+        lcAddMsg(lcBotReplies[key], 'bot');
+      }, 600);
+    }
+    function lcAddMsg(text, type) {
+      const container = document.getElementById('lc-messages');
+      if (!container) return;
+      const time = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+      const div = document.createElement('div');
+      div.className = `lc-msg ${type}`;
+      div.innerHTML = `<div class="lc-bubble">${text}</div><div class="lc-time">${time}</div>`;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // ── Init ──────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      // Apply dark mode on load
+      if (state.darkMode) {
+        document.documentElement.classList.add('dark');
+        const btn = document.getElementById('dark-toggle');
+        if (btn) btn.textContent = '☀️';
+      }
+      // Auth state
+      updateAuthUI();
+      // Cart count
+      updateCartUI();
+      // Wishlist badge
+      const wb = document.getElementById('wishlist-badge');
+      if (wb && state.wishlist.length) { wb.textContent = state.wishlist.length; wb.style.display = ''; }
+      // Load products
+      loadFeaturedProducts();
+      // Load category navbar
+      loadCategoryNavbar();
+      // Live Chat
+      renderLiveChat();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dokkhinmart.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Product – DOKKHINMART</title>
+  
+</head>
+<body>
+<div id="navbar-root"></div>
+<div id="cart-root"></div>
+
+<div class="container">
+  <div id="product-detail">
+    <div class="loading-center"><div class="loading-spinner"></div></div>
+  </div>
+  <!-- RELATED -->
+  <section class="section" id="related-section" style="display:none;">
+    <div class="section-header">
+      <span class="section-label">You May Also Like</span>
+      <h2>Related Products</h2>
+    </div>
+    <div class="products-grid" id="related-products"></div>
+  </section>
+</div>
+
+<div id="quick-view-overlay" class="modal-overlay" onclick="closeQuickView()"><div id="quick-view-modal"></div></div>
+<div id="footer-root"></div>
+
+<script>
+document.getElementById('navbar-root').innerHTML = renderNavbar('shop');
+document.getElementById('cart-root').innerHTML = renderCartSidebar();
+document.getElementById('footer-root').innerHTML = renderFooter();
+
+const slug = new URLSearchParams(window.location.search).get('slug');
+
+let selectedWeight = null;
+let selectedQty = 1;
+let currentProduct = null;
+
+async function loadProduct() {
+  if (!slug) { document.getElementById('product-detail').innerHTML = '<p style="padding:60px;text-align:center">Product not found.</p>'; return; }
+  const data = await apiCall(`/products/${slug}`);
+  if (!data.success) { document.getElementById('product-detail').innerHTML = '<p style="padding:60px;text-align:center">Product not found.</p>'; return; }
+  currentProduct = data.product;
+  document.title = `${data.product.name} – DOKKHINMART`;
+  renderProduct(data);
+  if (data.related?.length) {
+    document.getElementById('related-section').style.display = 'block';
+    document.getElementById('related-products').innerHTML = data.related.map(renderProductCard).join('');
+  }
+}
+
+function renderProduct(data) {
+  const p = data.product;
+  const displayPrice = p.sale_price || p.price;
+  const weights = p.weight_options ? (typeof p.weight_options === 'string' ? JSON.parse(p.weight_options) : p.weight_options) : [];
+  selectedWeight = weights[0] || null;
+  const wished = isWished(p.id);
+  document.getElementById('product-detail').innerHTML = `
+    <div style="padding:24px 0 8px;font-size:13px;color:var(--text-light);">
+      <a href="../index.html" style="color:var(--green-mid)">Home</a> / <a href="shop.html" style="color:var(--green-mid)">Shop</a> / ${p.name}
+    </div>
+    <div class="product-detail-grid">
+      <div class="product-gallery">
+        <div class="main-image">
+          <div class="img-placeholder">${getProductEmoji(p.name)}</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-category">${p.category_name || 'Product'}</div>
+        <h1>${p.name}</h1>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <span class="stars" style="font-size:18px;">${renderStars(Number(p.avg_rating)||0)}</span>
+          <span style="font-size:14px;color:var(--text-light)">${Number(p.avg_rating||0).toFixed(1)} (${p.review_count || 0} reviews)</span>
+        </div>
+        <div class="price-display">
+          <span class="price-main">৳${Number(displayPrice).toLocaleString()}</span>
+          <span class="price-unit">per ${p.unit}</span>
+          ${p.sale_price ? `<span class="price-old">৳${Number(p.price).toLocaleString()}</span>` : ''}
+        </div>
+        <div class="stock-badge"><span class="dot"></span>${p.stock_quantity > 0 ? `In Stock (${p.stock_quantity} available)` : 'Out of Stock'}</div>
+        <p style="color:var(--text-mid);font-size:15px;line-height:1.8;margin-bottom:24px;">${p.short_description || ''}</p>
+        ${weights.length ? `
+        <div class="weight-selector">
+          <h4>Select Weight:</h4>
+          <div class="weight-opts">
+            ${weights.map((w,i) => `<div class="weight-opt ${i===0?'selected':''}" onclick="selectWeight(this,'${w}')">${w}${p.unit}</div>`).join('')}
+          </div>
+        </div>` : ''}
+        <div class="quantity-selector">
+          <span style="font-weight:600;font-size:14px;">Quantity:</span>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <span class="qty-val" id="qty-display">1</span>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+        </div>
+        <div class="product-action-btns">
+          <button class="btn btn-primary btn-lg" onclick="handleAddToCart()">🛒 Add to Cart</button>
+          <button class="btn btn-lg ${wished?'btn-danger':'btn-outline'}" id="wish-btn" onclick="handleWishlist()">
+            ${wished ? '❤️ Wishlisted' : '🤍 Wishlist'}
+          </button>
+        </div>
+        <div style="margin-top:24px;padding:16px;background:var(--green-pale);border-radius:12px;font-size:13px;color:var(--text-mid);">
+          🚚 <strong>Free delivery</strong> on orders over ৳1000 &nbsp;|&nbsp; ⚡ 12-hour express available
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div style="margin-top:48px;">
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('desc',this)">Description</button>
+        <button class="tab-btn" onclick="switchTab('reviews',this)">Reviews (${p.review_count || 0})</button>
+      </div>
+      <div class="tab-content active" id="tab-desc">
+        <div style="font-size:15px;color:var(--text-mid);line-height:1.9;max-width:700px;">${p.description || 'No description available.'}</div>
+      </div>
+      <div class="tab-content" id="tab-reviews">
+        <div id="reviews-list">
+          ${data.reviews?.length ? data.reviews.map(r => `
+            <div class="review-card">
+              <div class="review-header">
+                <div class="reviewer-avatar">${r.user_name?.[0]?.toUpperCase() || '?'}</div>
+                <div>
+                  <div class="reviewer-name">${r.user_name}</div>
+                  <div class="review-date">${new Date(r.created_at).toLocaleDateString()}</div>
+                </div>
+                <span class="stars" style="margin-left:auto;">${renderStars(r.rating)}</span>
+              </div>
+              ${r.title ? `<div style="font-weight:600;margin-bottom:6px;">${r.title}</div>` : ''}
+              <div class="review-text">${r.comment || ''}</div>
+            </div>
+          `).join('') : '<p style="color:var(--text-light);padding:20px 0;">No reviews yet. Be the first to review!</p>'}
+        </div>
+        ${isLoggedIn() ? `
+        <div style="margin-top:32px;padding:28px;border:1px solid var(--border);border-radius:16px;">
+          <h4 style="margin-bottom:20px;color:var(--green-dark);">Write a Review</h4>
+          <div style="margin-bottom:16px;">
+            <label class="form-label">Rating</label>
+            <div style="display:flex;gap:8px;font-size:28px;">
+              ${[1,2,3,4,5].map(n=>`<span style="cursor:pointer;" onclick="setRating(${n})" id="star-${n}">☆</span>`).join('')}
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="review-title" placeholder="Summarize your experience"></div>
+          <div class="form-group"><label class="form-label">Review</label><textarea class="form-input" id="review-comment" placeholder="Share your thoughts..."></textarea></div>
+          <button class="btn btn-primary" onclick="submitReview()">Submit Review</button>
+        </div>` : `<p style="margin-top:24px;padding:20px;background:var(--cream);border-radius:12px;text-align:center;">
+          <a href="auth.html" style="color:var(--green-mid);font-weight:600;">Login</a> to write a review
+        </p>`}
+      </div>
+    </div>
+  `;
+}
+
+function selectWeight(el, w) {
+  document.querySelectorAll('.weight-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedWeight = w;
+}
+
+function changeQty(delta) {
+  selectedQty = Math.max(1, selectedQty + delta);
+  document.getElementById('qty-display').textContent = selectedQty;
+}
+
+function handleAddToCart() {
+  if (!currentProduct) return;
+  addToCart({ ...currentProduct, name: `${currentProduct.name}${selectedWeight ? ` (${selectedWeight}${currentProduct.unit})` : ''}` }, selectedQty);
+}
+
+function handleWishlist() {
+  if (!currentProduct) return;
+  const btn = document.getElementById('wish-btn');
+  const inList = isWished(currentProduct.id);
+  toggleWishlist(currentProduct, null);
+  if (inList) { btn.innerHTML = '🤍 Wishlist'; btn.classList.remove('btn-danger'); btn.classList.add('btn-outline'); }
+  else { btn.innerHTML = '❤️ Wishlisted'; btn.classList.remove('btn-outline'); btn.classList.add('btn-danger'); }
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`tab-${name}`).classList.add('active');
+}
+
+let selectedRating = 0;
+function setRating(n) {
+  selectedRating = n;
+  for (let i = 1; i <= 5; i++) {
+    const s = document.getElementById(`star-${i}`);
+    if (s) s.textContent = i <= n ? '★' : '☆';
+  }
+}
+
+async function submitReview() {
+  if (!selectedRating) { toast('Please select a rating', 'warning'); return; }
+  const title = document.getElementById('review-title').value;
+  const comment = document.getElementById('review-comment').value;
+  const data = await apiCall('/reviews', 'POST', { product_id: currentProduct.id, rating: selectedRating, title, comment });
+  if (data.success) { toast('Review submitted! ✅'); }
+  else { toast(data.message || 'Failed to submit', 'error'); }
+}
+
+loadProduct();
+</script>
+<script src="../main.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dokkhinmart.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Wishlist – DOKKHINMART</title>
+
+</head>
+<body>
+<div id="navbar-root"></div>
+<div id="cart-root"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>❤️ My Wishlist</h1>
+    <p>Your saved products — ready to order anytime</p>
+    <div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Wishlist</span></div>
+  </div>
+</div>
+
+<div class="container" style="padding:48px 20px;">
+  <div id="wishlist-grid" class="products-grid">
+    <div class="loading-center" style="grid-column:1/-1;padding:60px;"><div class="loading-spinner"></div></div>
+  </div>
+</div>
+
+<div id="quick-view-overlay" class="modal-overlay" onclick="closeQuickView()">
+  <div id="quick-view-modal"></div>
+</div>
+
+<div id="footer-root"></div>
+
+<script>
+  document.getElementById('navbar-root').innerHTML = renderNavbar('');
+  document.getElementById('cart-root').innerHTML = renderCartSidebar();
+  document.getElementById('footer-root').innerHTML = renderFooter();
+
+  function renderWishlist() {
+    const grid = document.getElementById('wishlist-grid');
+    if (!state.wishlist.length) {
+      grid.innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;padding:80px 20px;">
+          <div style="font-size:72px;margin-bottom:20px;">💔</div>
+          <h3 style="color:var(--green-dark);margin-bottom:12px;">Your wishlist is empty</h3>
+          <p style="color:var(--text-light);margin-bottom:28px;">Browse our products and save your favourites here.</p>
+          <a href="shop.html" class="btn btn-primary btn-lg">🛒 Start Shopping</a>
+        </div>`;
+      return;
+    }
+    grid.innerHTML = state.wishlist.map(p => renderProductCard(p)).join('');
+  }
+
+  renderWishlist();
+</script>
+<script src="../main.js"></script>
+</body>
+</html>

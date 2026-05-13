@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dokkhinmart.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Login – DOKKHINMART</title>
+
+</head>
+<body>
+<div id="navbar-root"></div>
+
+<div class="auth-page">
+  <div class="auth-card">
+    <div style="text-align:center;font-size:48px;margin-bottom:8px;">🐟</div>
+    <h2>DOKKHINMART</h2>
+    <p class="auth-subtitle">Fresh Fish & Honey at your door</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="showTab('login')">Login</button>
+      <button class="auth-tab" id="tab-register" onclick="showTab('register')">Register</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="login-form">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="login-email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="login-password" placeholder="Your password">
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+          <input type="checkbox"> Remember me
+        </label>
+        <a href="forgot-password.html" style="font-size:13px;color:var(--green-mid);">Forgot password?</a>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="doLogin()">Login</button>
+      <div style="text-align:center;margin:20px 0;color:var(--text-light);font-size:13px;">or</div>
+      <a href="https://wa.me/8801700000000" class="whatsapp-btn" style="width:100%;justify-content:center;" target="_blank">
+        💬 Continue with WhatsApp
+      </a>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="register-form" style="display:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="reg-name" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input type="tel" class="form-input" id="reg-phone" placeholder="+880 17...">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="reg-email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="reg-password" placeholder="At least 6 characters">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" class="form-input" id="reg-confirm" placeholder="Repeat password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Delivery Address (optional)</label>
+        <textarea class="form-textarea" id="reg-address" rows="2" placeholder="Your address"></textarea>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="doRegister()">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  renderNavbar('auth', '..');
+
+  // Redirect if already logged in
+  if (isLoggedIn()) window.location.href = 'profile.html';
+
+  // Show tab from URL hash
+  if (window.location.hash === '#register') showTab('register');
+
+  function showTab(tab) {
+    document.getElementById('login-form').style.display    = tab === 'login'    ? 'block' : 'none';
+    document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+    document.getElementById('tab-login').classList.toggle('active',    tab === 'login');
+    document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  }
+
+  async function doLogin() {
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) { toast('Please fill all fields', 'error'); return; }
+
+    const data = await apiCall('/auth/login', 'POST', { email, password });
+    if (data.success) {
+      login(data.user, data.token);
+      toast('Welcome back, ' + data.user.name + '! 👋');
+      setTimeout(() => window.location.href = 'profile.html', 1000);
+    } else {
+      toast(data.message || 'Login failed', 'error');
+    }
+  }
+
+  async function doRegister() {
+    const name     = document.getElementById('reg-name').value.trim();
+    const phone    = document.getElementById('reg-phone').value.trim();
+    const email    = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const confirm  = document.getElementById('reg-confirm').value;
+    const address  = document.getElementById('reg-address').value.trim();
+
+    if (!name || !email || !password) { toast('Please fill all required fields', 'error'); return; }
+    if (password.length < 6) { toast('Password must be at least 6 characters', 'error'); return; }
+    if (password !== confirm) { toast('Passwords do not match', 'error'); return; }
+
+    const data = await apiCall('/auth/register', 'POST', { name, phone, email, password, address });
+    if (data.success) {
+      login(data.user, data.token);
+      toast('Account created! Welcome to DOKKHINMART 🎉');
+      setTimeout(() => window.location.href = 'profile.html', 1000);
+    } else {
+      toast(data.message || 'Registration failed', 'error');
+    }
+  }
+
+  // Allow Enter key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (document.getElementById('login-form').style.display !== 'none') doLogin();
+      else doRegister();
+    }
+  });
+  
+</script>
+<script src="../main.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Product</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+
+<div class="max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow">
+  <h1 class="text-3xl font-bold mb-6">Add Product</h1>
+
+  <form id="productForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <input id="name" type="text" placeholder="Product Name" class="border p-3 rounded-xl" required>
+    <input id="price" type="number" placeholder="Price" class="border p-3 rounded-xl" required>
+
+    <input id="stock" type="number" placeholder="Stock Quantity" class="border p-3 rounded-xl" required>
+    <input id="category" type="number" placeholder="Category ID" class="border p-3 rounded-xl" required>
+
+    <input id="image" type="text" placeholder="/uploads/product.jpg" class="border p-3 rounded-xl md:col-span-2" required>
+
+    <textarea id="description" placeholder="Description" class="border p-3 rounded-xl md:col-span-2"></textarea>
+
+    <button class="bg-black text-white p-3 rounded-xl md:col-span-2">
+      Save Product
+    </button>
+  </form>
+
+  <p id="msg" class="mt-4 text-sm"></p>
+</div>
+
+<script>
+document.getElementById('productForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  const data = {
+    name: document.getElementById('name').value,
+    price: document.getElementById('price').value,
+    stock_quantity: document.getElementById('stock').value,
+    category_id: document.getElementById('category').value,
+    thumbnail: document.getElementById('image').value,
+    description: document.getElementById('description').value
+  };
+
+  try {
+    const res = await fetch('/api/products', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+    document.getElementById('msg').innerText =
+      result.message || 'Saved successfully';
+  } catch(err) {
+    document.getElementById('msg').innerText = 'Error saving product';
+  }
+});
+</script>
+
+</body>
+</html>

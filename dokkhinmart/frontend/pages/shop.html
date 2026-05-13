@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dokkhinmart.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Shop – DOKKHINMART</title>
+</head>
+<body>
+<div id="navbar-root"></div>
+<div id="cart-root"></div>
+
+<div class="page-header">
+  <div class="container">
+    <h1>Our Products</h1>
+    <div class="breadcrumb"><a href="../index.html">Home</a><span>›</span><span>Shop</span></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="shop-layout">
+
+    <!-- FILTER SIDEBAR -->
+    <aside class="filter-sidebar">
+      <div class="filter-card">
+        <h4>Categories</h4>
+        <div class="filter-option"><input type="radio" name="cat" id="cat-all" value="" checked onchange="applyFilters()"><label for="cat-all">All Products</label></div>
+        <div class="filter-option"><input type="radio" name="cat" id="cat-fish" value="fresh-fish" onchange="applyFilters()"><label for="cat-fish">Fresh Fish</label></div>
+        <div class="filter-option"><input type="radio" name="cat" id="cat-honey" value="pure-honey" onchange="applyFilters()"><label for="cat-honey">Pure Honey</label></div>
+        <div class="filter-option"><input type="radio" name="cat" id="cat-hilsa" value="hilsa-fish" onchange="applyFilters()"><label for="cat-hilsa">Hilsa Fish</label></div>
+        <div class="filter-option"><input type="radio" name="cat" id="cat-combo" value="combo-offers" onchange="applyFilters()"><label for="cat-combo">Combo Offers</label></div>
+        <div class="filter-option"><input type="radio" name="cat" id="cat-seafood" value="seafood" onchange="applyFilters()"><label for="cat-seafood">Seafood</label></div>
+        <div class="filter-option"><input type="radio" name="cat" id="cat-dried" value="dried-fish" onchange="applyFilters()"><label for="cat-dried">Dried Fish</label></div>
+        <div class="filter-option"><input type="radio" name="cat" id="cat-grocery" value="local-groceries" onchange="applyFilters()"><label for="cat-grocery">Local Groceries</label></div>
+      </div>
+      <div class="filter-card">
+        <h4>Availability</h4>
+        <div class="filter-option"><input type="checkbox" id="in-stock" onchange="applyFilters()"><label for="in-stock">In Stock Only</label></div>
+        <div class="filter-option"><input type="checkbox" id="on-sale" onchange="applyFilters()"><label for="on-sale">On Sale</label></div>
+        <div class="filter-option"><input type="checkbox" id="featured" onchange="applyFilters()"><label for="featured">Featured</label></div>
+      </div>
+      <div class="filter-card">
+        <h4>Price Range</h4>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;">
+          <input type="number" id="price-min" placeholder="Min" value="0" style="width:80px;padding:8px;border:2px solid var(--border);border-radius:8px;font-size:13px;background:var(--white);color:var(--text-dark);outline:none;" onchange="applyFilters()">
+          <span style="color:var(--text-light)">–</span>
+          <input type="number" id="price-max" placeholder="Max" value="5000" style="width:80px;padding:8px;border:2px solid var(--border);border-radius:8px;font-size:13px;background:var(--white);color:var(--text-dark);outline:none;" onchange="applyFilters()">
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-block" onclick="resetFilters()">Reset Filters</button>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="shop-main">
+      <div class="shop-topbar">
+        <div class="shop-search">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Search products..." oninput="applyFilters()">
+        </div>
+        <select class="sort-select" id="sort-select" onchange="applyFilters()">
+          <option value="total_sold">Best Selling</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+          <option value="newest">New Arrivals</option>
+          <option value="rating">Top Rated</option>
+        </select>
+      </div>
+      <div id="results-info" style="font-size:14px;color:var(--text-light);margin-bottom:20px;"></div>
+      <div id="products-grid" class="products-grid">
+        <div class="loading-center" style="grid-column:1/-1;"><div class="loading-spinner"></div></div>
+      </div>
+      <div id="no-results" class="empty-state hidden">
+        <span class="empty-state-icon">🔍</span>
+        <h3>No products found</h3>
+        <p>Try adjusting your filters or search term.</p>
+        <button class="btn btn-outline" onclick="resetFilters()" style="margin-top:16px;">Clear Filters</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+
+<!--
+  FIX 1 (CRITICAL — ROOT CAUSE OF INFINITE SPINNER):
+  main.js was loaded AFTER the inline script, so renderNavbar / renderCartSidebar /
+  renderFooter / apiCall / renderProductCard were all undefined when the inline
+  script ran. JavaScript threw a ReferenceError on the very first line, which
+  silently killed the rest of the script — loadProducts() never fired and the
+  spinner never cleared.  Moving <script src="../main.js"> ABOVE the inline
+  <script> block fixes all function-not-defined crashes.
+-->
+<script src="../main.js"></script>
+
+<script>
+  // These calls now succeed because main.js is already loaded above.
+  renderNavbar('shop', '..');
+  renderCartSidebar('../checkout.html');
+  renderFooter('..');
+
+  let allProducts = [];
+
+  // ── Category slug → category_name matching helper ──────────────────────────
+  // FIX 3: Filter radio values are slugs ("fresh-fish", "pure-honey") but the
+  // API returns `category_name` as human-readable text ("Fresh Fish", "Pure Honey").
+  // Convert slug → space-separated words for a flexible, case-insensitive match.
+  function slugToWords(slug) {
+    return slug.replace(/-/g, ' ').toLowerCase();
+  }
+
+  async function loadProducts() {
+    try {
+      // FIX 4: Removed ?limit=100 — the /api/products route does not support
+      // a limit param (it was silently ignored). Route already returns all active
+      // products.  Keeping the call clean avoids confusion during debugging.
+      const data = await apiCall('/products');
+
+      if (data && data.success && Array.isArray(data.products) && data.products.length > 0) {
+        // FIX 5: Normalise numeric/boolean fields.
+        // MySQL drivers often return DECIMAL columns as strings and TINYINT(1)
+        // booleans as 0/1 integers. Without explicit coercion, comparisons like
+        // `p.sale_price && ...` or `p.stock_quantity > 0` silently fail.
+        allProducts = data.products.map(p => ({
+          ...p,
+          price:          Number(p.price)          || 0,
+          sale_price:     p.sale_price != null && p.sale_price !== '' ? Number(p.sale_price) : null,
+          stock_quantity: Number(p.stock_quantity)  || 0,
+          avg_rating:     Number(p.avg_rating)      || 0,
+          review_count:   Number(p.review_count)    || 0,
+          total_sold:     Number(p.total_sold)      || 0,
+          is_featured:    Boolean(Number(p.is_featured)),
+          is_active:      Boolean(Number(p.is_active)),
+        }));
+      } else {
+        // FIX 6: Fallback demo data so the page is never blank during development.
+        allProducts = [
+          { id:1, name:'Fresh Hilsa Fish (Ilish)', category_name:'Hilsa Fish',   category_slug:'hilsa-fish',   slug:'fresh-hilsa-fish',  price:850,  sale_price:null, unit:'kg',    avg_rating:4.8, review_count:245, is_featured:true,  is_active:true, stock_quantity:50,  total_sold:245 },
+          { id:2, name:'Fresh Rohu Fish',           category_name:'Fresh Fish',   category_slug:'fresh-fish',   slug:'fresh-rohu-fish',   price:280,  sale_price:null, unit:'kg',    avg_rating:4.6, review_count:312, is_featured:true,  is_active:true, stock_quantity:80,  total_sold:312 },
+          { id:3, name:'Wild Honey (Raw)',           category_name:'Pure Honey',   category_slug:'pure-honey',   slug:'wild-honey-raw',    price:650,  sale_price:null, unit:'kg',    avg_rating:4.9, review_count:189, is_featured:true,  is_active:true, stock_quantity:30,  total_sold:189 },
+          { id:4, name:'Sidr Honey (Beri Phul)',    category_name:'Pure Honey',   category_slug:'pure-honey',   slug:'sidr-honey',        price:1200, sale_price:980,  unit:'kg',    avg_rating:5.0, review_count:145, is_featured:true,  is_active:true, stock_quantity:15,  total_sold:145 },
+          { id:5, name:'Catfish (Magur)',            category_name:'Catfish',      category_slug:'catfish',      slug:'catfish-magur',     price:380,  sale_price:null, unit:'kg',    avg_rating:4.4, review_count:98,  is_featured:false, is_active:true, stock_quantity:40,  total_sold:98  },
+          { id:6, name:'Hilsa + Honey Combo',        category_name:'Combo Offers', category_slug:'combo-offers', slug:'hilsa-honey-combo', price:1400, sale_price:1150, unit:'piece', avg_rating:4.7, review_count:67,  is_featured:true,  is_active:true, stock_quantity:20,  total_sold:67  },
+          { id:7, name:'Fresh Pangasius Fish',       category_name:'Fresh Fish',   category_slug:'fresh-fish',   slug:'fresh-pangasius',   price:220,  sale_price:null, unit:'kg',    avg_rating:4.5, review_count:423, is_featured:false, is_active:true, stock_quantity:100, total_sold:423 },
+          { id:8, name:'Forest Honey',               category_name:'Pure Honey',   category_slug:'pure-honey',   slug:'forest-honey',      price:800,  sale_price:null, unit:'kg',    avg_rating:4.8, review_count:112, is_featured:false, is_active:true, stock_quantity:25,  total_sold:112 },
+        ];
+      }
+    } catch (err) {
+      console.error('loadProducts error:', err);
+      // allProducts stays [] — applyFilters() will show the "no results" state
+    }
+
+    // FIX 7: Apply ?category= URL param BEFORE the first render so the page
+    // opens pre-filtered when linked from homepage category cards.
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('category');
+    if (cat) {
+      const radio = document.querySelector(`input[value="${cat}"]`);
+      if (radio) {
+        radio.checked = true;
+      } else {
+        // No matching radio — store the raw slug so applyFilters() can still
+        // filter against category_slug from the API response.
+        window._urlCategorySlug = cat;
+      }
+    }
+
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const search   = (document.getElementById('search-input')?.value || '').toLowerCase();
+    const category = document.querySelector('input[name="cat"]:checked')?.value || '';
+    const inStock  = document.getElementById('in-stock')?.checked  || false;
+    const onSale   = document.getElementById('on-sale')?.checked   || false;
+    const featured = document.getElementById('featured')?.checked  || false;
+    const priceMin = Number(document.getElementById('price-min')?.value) || 0;
+    const priceMax = Number(document.getElementById('price-max')?.value) || 9999999;
+    const sort     = document.getElementById('sort-select')?.value || 'total_sold';
+
+    // Determine the active category slug: prefer the selected radio value,
+    // fall back to the raw URL param slug stored when no radio matched.
+    const activeSlug = category || window._urlCategorySlug || '';
+    const catWords   = activeSlug ? slugToWords(activeSlug) : '';
+
+    // Update page heading to reflect active category
+    const heading = document.querySelector('.page-header h1');
+    if (heading) {
+      if (activeSlug) {
+        const label = activeSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        heading.textContent = label;
+      } else {
+        heading.textContent = 'Our Products';
+      }
+    }
+
+    let filtered = allProducts.filter(p => {
+      const effectivePrice = Number(p.sale_price || p.price);
+      const catName = (p.category_name || '').toLowerCase();
+      // Also check category_slug field returned by the API for exact slug match
+      const catSlug = (p.category_slug || '').toLowerCase();
+
+      if (search   && !p.name.toLowerCase().includes(search) && !catName.includes(search)) return false;
+      if (catWords && !catName.includes(catWords) && catSlug !== activeSlug) return false;
+      if (inStock  && !(p.stock_quantity > 0))        return false;
+      if (onSale   && !p.sale_price)                  return false;
+      if (featured && !p.is_featured)                 return false;
+      if (effectivePrice < priceMin || effectivePrice > priceMax) return false;
+      return true;
+    });
+
+    // FIX 9: Added missing 'newest' sort (descending by id).
+    if (sort === 'price_asc')  filtered.sort((a,b) => (Number(a.sale_price)||Number(a.price)) - (Number(b.sale_price)||Number(b.price)));
+    if (sort === 'price_desc') filtered.sort((a,b) => (Number(b.sale_price)||Number(b.price)) - (Number(a.sale_price)||Number(a.price)));
+    if (sort === 'total_sold') filtered.sort((a,b) => (b.total_sold||0) - (a.total_sold||0));
+    if (sort === 'rating')     filtered.sort((a,b) => (b.avg_rating||0) - (a.avg_rating||0));
+    if (sort === 'newest')     filtered.sort((a,b) => (b.id||0) - (a.id||0));
+
+    const grid  = document.getElementById('products-grid');
+    const noRes = document.getElementById('no-results');
+    const info  = document.getElementById('results-info');
+
+    if (!filtered.length) {
+      grid.innerHTML = '';
+      noRes.classList.remove('hidden');
+      info.textContent = '';
+    } else {
+      noRes.classList.add('hidden');
+      // FIX 10: basePath='..' is correct for /pages/shop.html so image
+      // URLs and product detail links resolve relative to the root.
+      grid.innerHTML = filtered.map(p => renderProductCard(p, '..')).join('');
+      info.textContent = `Showing ${filtered.length} product${filtered.length !== 1 ? 's' : ''}`;
+    }
+  }
+
+  function resetFilters() {
+    window._urlCategorySlug = '';
+    document.getElementById('search-input').value    = '';
+    document.querySelector('input[value=""]').checked = true;
+    document.getElementById('in-stock').checked      = false;
+    document.getElementById('on-sale').checked       = false;
+    document.getElementById('featured').checked      = false;
+    document.getElementById('price-min').value       = '0';
+    document.getElementById('price-max').value       = '5000';
+    document.getElementById('sort-select').value     = 'total_sold';
+    applyFilters();
+  }
+
+  loadProducts();
+</script>
+</body>
+</html>

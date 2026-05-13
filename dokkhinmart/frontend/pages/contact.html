@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dokkhinmart.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Contact Us – DOKKHINMART</title>
+
+</head>
+<body>
+<div id="navbar-root"></div>
+<div id="cart-root"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>📞 Contact Us</h1>
+    <p>We'd love to hear from you — reach out anytime</p>
+    <div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Contact</span></div>
+  </div>
+</div>
+
+<div class="container" style="padding:60px 20px;">
+  <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:start;">
+
+    <!-- CONTACT INFO -->
+    <div>
+      <span class="section-label">Get in Touch</span>
+      <h2 style="font-size:1.8rem;margin:12px 0 24px;">We're Here to Help</h2>
+      <p style="color:var(--text-mid);line-height:1.8;margin-bottom:40px;">Have a question about an order, product freshness, or delivery? Contact us through any channel — we typically respond within 1 hour during business hours.</p>
+
+      <div style="display:flex;flex-direction:column;gap:20px;margin-bottom:40px;">
+        <div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--green-pale);border-radius:14px;">
+          <span style="font-size:32px;">📞</span>
+          <div>
+            <div style="font-weight:700;color:var(--green-dark);">Phone</div>
+            <div style="color:var(--text-mid);font-size:15px;">+8801777608942</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--green-pale);border-radius:14px;">
+          <span style="font-size:32px;">💬</span>
+          <div>
+            <div style="font-weight:700;color:var(--green-dark);">WhatsApp</div>
+            <a href="https://wa.me/+8801777608942" target="_blank" style="color:var(--green-mid);font-size:15px;">Chat with us on WhatsApp →</a>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--green-pale);border-radius:14px;">
+          <span style="font-size:32px;">📧</span>
+          <div>
+            <div style="font-weight:700;color:var(--green-dark);">Email</div>
+            <div style="color:var(--text-mid);font-size:15px;">foysalmahmudhasan17@gmail.com</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--green-pale);border-radius:14px;">
+          <span style="font-size:32px;">📍</span>
+          <div>
+            <div style="font-weight:700;color:var(--green-dark);">Location</div>
+            <div style="color:var(--text-mid);font-size:15px;">Dhaka, Bangladesh</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--green-pale);border-radius:14px;">
+          <span style="font-size:32px;">⏰</span>
+          <div>
+            <div style="font-weight:700;color:var(--green-dark);">Business Hours</div>
+            <div style="color:var(--text-mid);font-size:15px;">6:00 AM – 10:00 PM, 7 days a week</div>
+          </div>
+        </div>
+      </div>
+
+      <a href="https://wa.me/+8801777608942" target="_blank" class="btn btn-primary btn-lg w-full" style="justify-content:center;">
+        💬 WhatsApp Order Support
+      </a>
+
+      <!-- Map embed placeholder -->
+      <div style="margin-top:32px;border-radius:16px;overflow:hidden;border:1px solid var(--border);">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d233667.82099697064!2d90.27923449!3d23.780572650000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b087026b81%3A0x8fa563bbdd5904c2!2sDhaka!5e0!3m2!1sen!2sbd!4v1700000000000"
+          width="100%" height="200" style="border:0;display:block;" allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- CONTACT FORM -->
+    <div style="background:white;border-radius:24px;padding:40px;box-shadow:0 4px 24px rgba(0,0,0,0.07);border:1px solid var(--border);">
+      <h3 style="color:var(--green-dark);margin-bottom:28px;">📝 Send Us a Message</h3>
+      <div class="form-group">
+        <label class="form-label">Your Name *</label>
+        <input class="form-input" id="c-name" placeholder="Full name" required>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input class="form-input" id="c-phone" placeholder="+880...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" id="c-email" type="email" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject *</label>
+        <select class="form-input" id="c-subject">
+          <option value="">Select a topic</option>
+          <option>Order inquiry</option>
+          <option>Product question</option>
+          <option>Delivery issue</option>
+          <option>Refund / Return</option>
+          <option>Bulk / Business order</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message *</label>
+        <textarea class="form-input" id="c-message" placeholder="Write your message here..." rows="5" required></textarea>
+      </div>
+      <button class="btn btn-primary w-full" style="justify-content:center;" onclick="sendMessage()" id="send-btn">
+        📤 Send Message
+      </button>
+      <p style="font-size:13px;color:var(--text-light);margin-top:16px;text-align:center;">We usually respond within 1 hour during business hours.</p>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<div id="footer-root"></div>
+
+<script>
+  document.getElementById('navbar-root').innerHTML = renderNavbar('contact');
+  document.getElementById('cart-root').innerHTML = renderCartSidebar();
+  document.getElementById('footer-root').innerHTML = renderFooter();
+
+  async function sendMessage() {
+    const name = document.getElementById('c-name').value.trim();
+    const phone = document.getElementById('c-phone').value.trim();
+    const email = document.getElementById('c-email').value.trim();
+    const subject = document.getElementById('c-subject').value;
+    const message = document.getElementById('c-message').value.trim();
+
+    if (!name || !subject || !message) { toast('Please fill all required fields', 'warning'); return; }
+
+    const btn = document.getElementById('send-btn');
+    btn.disabled = true; btn.textContent = 'Sending...';
+
+    // Simulate sending (replace with actual API call if you add a contact endpoint)
+    await new Promise(r => setTimeout(r, 1000));
+
+    btn.disabled = false; btn.textContent = '📤 Send Message';
+    toast('Message sent! We\'ll get back to you shortly 🎉');
+    document.getElementById('c-name').value = '';
+    document.getElementById('c-phone').value = '';
+    document.getElementById('c-email').value = '';
+    document.getElementById('c-subject').value = '';
+    document.getElementById('c-message').value = '';
+  }
+</script>
+<script src="../main.js"></script>
+</body>
+</html>
